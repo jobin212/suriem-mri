@@ -1,18 +1,21 @@
-N = 50
+N = 50;
 
-%pi(x) = boxcar function
-x = -pi:pi
-p = zeros(size(x))
+coefficients = 1:2*N+1
 
-region1 = x(x < -pi/2 | x > pi /2)
-region2 = x(x >= -pi/2 & x <= pi/2)
-
-
-
-for i = 0:1:size(x)
-    for n = -N:N
-        %compute partial sum
-        p[i] = p[i] + 
-   
-    end
+for i = 1:(2*N+1)
+    k = coefficients(i) - N -1;
+    
+    %%insert formula here
+    coefficients(i) = ((-1)^(k)) / (pi^(2)*k);
 end
+  
+%replace k = 0 with 0 (evalute original integral with k = 0)
+coefficients(N+1) = 0
+
+[reconstruction, domain] = ComputeFourierReconstruction(coefficients);
+
+
+%%
+
+plot(domain, reconstruction);
+

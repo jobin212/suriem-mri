@@ -1,0 +1,16 @@
+N = 50;
+
+coefficients = 1:101;
+
+for i = 1:101
+    k = coefficients(i);
+    coefficients(i) = ((-1)^(k)) / (pi^(2)*k)
+end
+  
+
+
+
+reconstruction = ComputeFourierReconstruction(coefficients);
+
+semilogy(domain, reconstruction);
+
