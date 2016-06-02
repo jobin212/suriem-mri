@@ -1,5 +1,4 @@
-%%%%%%what are the approximation properties??
-
+%%%%%%what are the approximation properties?
 N = 50;
 k = -N:N;
 
@@ -8,7 +7,7 @@ coefficients =  1 ./(pi*2i*k);
 %replace k = 0 with integral value
 coefficients(N+1) = 0;
 
-
+%Reconstruction
 [reconstruction, domain] = ComputeFourierReconstruction(coefficients);
 
 
@@ -25,7 +24,7 @@ r(region2) = ((pi - domain(region2)) / (2*pi))
 %calculate error
 error = abs(r - reconstruction);
 
-
+%plot
 plot(domain, reconstruction), title('Reconstruction');
 figure;
 plot(domain, error), title('Error Function');

@@ -1,4 +1,4 @@
-%the higher k values appear to give a less accurate picture
+%the higher k values appear to give a less accurate picture?
 
 N = 50;
 M = 100;
@@ -19,11 +19,10 @@ x_0 = 0;
 r_jump = 1;
 
 %calculate coefficient estimates 
-coefficients_est = (r_jump .* exp(-1*k*x_0*1i)) ./ (2i*pi*k)
+coefficients_est = (r_jump .* exp(-1*k*x_0*1i)) ./ (2i*pi*k);
 
-%function call to plot reconstruction
-PlotReconstruction(coefficients)
-hold on
-PlotReconstruction(coefficients_est)
+%error
+%note: error is zero
+error = abs(coefficients - coefficients_est);
 
 
