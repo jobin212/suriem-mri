@@ -1,3 +1,5 @@
+%%%%%%what are the approximation properties??
+
 N = 50;
 k = -N:N;
 
@@ -10,18 +12,18 @@ coefficients(N+1) = 0;
 [reconstruction, domain] = ComputeFourierReconstruction(coefficients);
 
 
-%compute pi(x)
+%compute r(x)
 region1 = (domain < 0);
 region2 = (domain > 0);
 
-p = zeros(size(domain));
+r = zeros(size(domain));
 
-p(region1) = ((- pi - domain(region1))/ (2*pi))
-p(region2) = ((pi - domain(region2)) / (2*pi))
+r(region1) = ((- pi - domain(region1))/ (2*pi))
+r(region2) = ((pi - domain(region2)) / (2*pi))
 
 
 %calculate error
-error = abs(p - reconstruction);
+error = abs(r - reconstruction);
 
 
 plot(domain, reconstruction), title('Reconstruction');

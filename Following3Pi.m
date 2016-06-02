@@ -1,3 +1,5 @@
+%%what are the approximation properties??
+
 N = 50;
 
 %coefficients = 1:2*N+1;
