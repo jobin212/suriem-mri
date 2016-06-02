@@ -25,6 +25,8 @@ r(region2) = ((pi - domain(region2)) / (2*pi))
 error = abs(r - reconstruction);
 
 %plot
-plot(domain, reconstruction), title('Reconstruction');
-figure;
-plot(domain, error), title('Error Function');
+plot(domain, r, 'k', domain, reconstruction, 'r','LineWidth',2 ), title('r(x) and its reconstruction');
+legend('r(x)', 'reconstruction');
+
+%figure;
+%plot(domain, error), title('Error Function');
