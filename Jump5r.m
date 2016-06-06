@@ -5,8 +5,8 @@
 
 %%TODO generalize for J jumps
 
-N = 50;
-M = 100;
+N = 100;
+M = N+50;
 
 %define intervals
 k0 = -N:N;
@@ -33,10 +33,13 @@ coefficients_est_k2 = (r_jump .* exp(-1*k2*x_0*1i)) ./ (2i*pi*k2);
 
 %combine coefficients
 coefficients = [coefficients_est_k1, coefficients_k0, coefficients_est_k2];
-[reconstruction, domain] = ComputeFourierReconstruction(coefficients);
-[r_k0, d_k0] = ComputeFourierReconstruction(coefficients_k0);
 
-plot(domain, reconstruction, d_k0, r_k0), title('Reconstruction');
+%reconstruction
+[reconstruction_mn, domain_mn] = ComputeFourierReconstruction(coefficients);
+[reconstruction_n, domain_n] = ComputeFourierReconstruction(coefficients_k0);
+
+plot(domain_mn, reconstruction_mn, domain_n, reconstruction_n), title('Reconstruction');
+legend('mn', 'n');
 
 
 
