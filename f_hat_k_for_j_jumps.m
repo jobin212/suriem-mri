@@ -13,10 +13,11 @@ r_jump = zeros(size(x));
 
 
 %calculate coefficient estimates
+sum = 0;
 coefficients_est_k = zeros(size(k));
-for y = size(k)
-    for z = size(r_jump)
-        coefficients_est_k(y) = coefficients_est_k(y) + (r_jump(z) * exp(-1i* x(z)*y))/(2i*pi*y);
+for y = 1:size(k)
+    for z = 1:size(r_jump)
+        coefficients_est_k(y) = coefficients_est_k(y) + (r_jump(z) * exp(-1i* x(z)*y))/(2i*pi*y);      
     end
 end
         
