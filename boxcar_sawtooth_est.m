@@ -5,10 +5,9 @@ K = -N:N;
 %same formula
 coefficients_est =  sin(K*pi/2) ./(pi^2 *K);
 
-
 %replace k = 0 with integral value
 coefficients_est(N+1) = 0;
-[reconstruction_orig, domain] = ComputeFourierReconstruction(coefficients_est);
+[reconstruction_orig, ~] = ComputeFourierReconstruction(coefficients_est);
 
 %%%%%%%%%%%%%%%%%% initialize jump function
 
@@ -25,12 +24,10 @@ r_jump = zeros(size(x_jump));
 r_jump(1) = 1/pi;
 r_jump(2) = -1/pi;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%% calculate f_k^est
+
 %calculate coefficient estimate
 coefficients_est_k = zeros(size(K));
 
-
-%%!! cannot use size(K) for index?
 for k = -N:N
     for j = 1:JUMPS
         coefficients_est_k(k+N+1) = coefficients_est_k(k+N+1) + (r_jump(j) * exp(-1i* x_jump(j)*k))/(2i*pi*k);  
@@ -51,38 +48,12 @@ coefficients_diff = coefficients_est - coefficients_est_k;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%calculating second half of the sum
 
+%calculating second half of the sum
 jump_sum = zeros(size(domain));
 
-%define sawtooth function g_j
-g = zeros(JUMPS, 1024);
-
-
-
-%J + 1 piecewise smooth for J jumps
-%{
-region1_1 = (domain < x_jump(1));
-region1_2 =  (domain > x_jump(1));
-
-region2_1 = (domain < x_jump(2));
-region2_2 = (domain > x_jump(2));
-
-
-g(1,region1_1) = ((- pi - domain(region1_1))/ (2*pi));
-g(1,region1_2) = ((pi - domain(region1_2)) / (2*pi));
-
-g(2,region2_1) = ((- pi - domain(region2_1))/ (2*pi));
-g(2,region2_2) = ((pi - domain(region2_2)) / (2*pi));
-%}
-
 %%anonymous function
-
 g = @(x) ((-pi-x)/(2*pi) .* (x<0)) + ((pi -x)/(2*pi) .* (x>0));
-
-
-
-
 
 %%caculate sum
 for x = 1:size(jump_sum)
