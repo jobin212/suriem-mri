@@ -17,7 +17,7 @@ region2 = (domain > 0);
 
 r = zeros(size(domain));
 
-r(region1) = ((- pi - domain(region1))/ (2*pi))
+r(region1) = ((- pi - domain(region1))/ (2*pi))`
 r(region2) = ((pi - domain(region2)) / (2*pi))
 
 
