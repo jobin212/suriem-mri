@@ -62,7 +62,3 @@ semilogy(x16r, err16, x16r, err64, x16r, err256)
 
 title('Error plot for N = 16');
 legend('N = 16', 'N = 64', 'N = 256');
-
-xyz
-yy
-zz
