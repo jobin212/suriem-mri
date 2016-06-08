@@ -6,7 +6,19 @@ K = -N:N;
 coefficients_est =  GetFourierCoefficients('piecewise', N);
 
 %replace k = 0 with integral value
-[reconstruction_orig, ~] = ComputeFourierReconstruction(coefficients_est);
+[reconstruction_orig, domain] = ComputeFourierReconstruction(coefficients_est);
+
+edge_coefficients = coefficients_est .* (1i*sign(K) .* pi .*abs(K) ./ N).';
+
+[edge_approx, domain] = ComputeFourierReconstruction(edge_coefficients);
+plot(domain, reconstruction_orig, 'k');
+hold on;
+stem(domain, edge_approx .* (abs(edge_approx) > 1));
+legend('Function', 'Conjugate Sum');
+title('Conjugate Sum with Polynomial Kernel');
+
+
+figure;
 
 %%%%%%%%%%%%%%%%%% initialize jump function
 
@@ -111,7 +123,6 @@ err_orig = abs(reconstruction_orig - gg);
 semilogy(domain, err_final, 'k', domain, err_orig, 'r');
 title('Error plot');
 legend('New Reconstruction', 'Old Reconstruction');
-
 
 
 

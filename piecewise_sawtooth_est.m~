@@ -6,7 +6,12 @@ K = -N:N;
 coefficients_est =  GetFourierCoefficients('piecewise', N);
 
 %replace k = 0 with integral value
-[reconstruction_orig, ~] = ComputeFourierReconstruction(coefficients_est);
+[reconstruction_orig, domain] = ComputeFourierReconstruction(coefficients_est);
+
+edge_coefficients = coefficients_est .* (1i.*sign(K) .* pi .*abs(K) ./ N);
+
+[edge_approx, domain] = ComputeFourierReconstruction(edge_coefficients);
+plot(domain, edge_approx);
 
 %%%%%%%%%%%%%%%%%% initialize jump function
 
@@ -61,7 +66,12 @@ coefficients_diff = coefficients_est.' - coefficients_est_k;
 jump_sum = zeros(size(domain));
 
 %%anonymous function
-g = @(x) ((-pi-x)/(2*pi) .* (x<0)) + ((pi -x)/(2*pi) .* (x>0));
+g = @(x) ((-pi-x)/(2*pi) .* (x<0)) + ((pi -x)/(2*pi) .* (x>=0));
+%h = @(y) (pi -y) /(2*pi) + floor(y/(2*pi));
+
+%plot(domain, g(domain), 'k-*', domain, h(domain), 'r-o');
+
+
 
 %%caculate sum
 for x = 1:size(jump_sum)
@@ -80,27 +90,23 @@ reconstruction_final = reconstruction_combined + jump_sum;
 %%error
 gg = zeros(size(domain))
 
-region1 = ((domain < (-3*pi /4)) | (domain > (3 * pi /4)) | (domain > -pi /2 & domain < -pi / 4) | (domain > pi /8 & domain< 3* pi / 8));
-gg(region1) = 0;
+%region1 = ((domain < (-3*pi /4)) | (domain >= (3 * pi /4)) | (domain >= -pi /2 & domain < -pi / 4) | (domain >= pi /8 & domain< 3* pi / 8));
+%gg(region1) = 0;
 
-region2 = (domain > (-3*pi/4) & domain< -pi /2);
+region2 = (domain >= (-3*pi/4) & domain< -pi /2);
 gg(region2) = 3/2;
 
-region3 = (domain > -pi /4 & domain < pi /8);
+region3 = (domain >= -pi /4 & domain < pi /8);
 gg(region3) = 7/4 - domain(region3)/2 + sin(domain(region3) - (1/4));
 
-region4 = (domain > 3*pi /8 & domain < 3*pi /4);
+region4 = (domain >= 3*pi /8 & domain < 3*pi /4);
 gg(region4) = (11/4) * domain(region4) - 5;
-
-
-%%%have to flip reconstruction?
-reconstruction_final = (reconstruction_final);
 
 
 %plot
 plot(domain, reconstruction_final, 'k', domain, reconstruction_orig, 'r', domain, gg, 'm');
-legend('New Reconstruction', 'Old Reconstruction');
-
+legend('New Reconstruction', 'Old Reconstruction', 'Original Function');
+title('Reconstruction');
 
 figure;
 
@@ -108,6 +114,9 @@ err_final = abs(reconstruction_final - gg);
 err_orig = abs(reconstruction_orig - gg);
 
 semilogy(domain, err_final, 'k', domain, err_orig, 'r');
+title('Error plot');
+legend('New Reconstruction', 'Old Reconstruction');
+
 
 
 
