@@ -17,7 +17,7 @@ stem(domain, edge_approx .* (abs(edge_approx) > 1));
 legend('Function', 'Conjugate Sum');
 title('Conjugate Sum with Polynomial Kernel');
 
-
+[peaks, locations] = findpeaks(edge_approx .* (abs(edge_approx) > 1));
 figure;
 
 %%%%%%%%%%%%%%%%%% initialize jump function
@@ -123,6 +123,14 @@ err_orig = abs(reconstruction_orig - gg);
 semilogy(domain, err_final, 'k', domain, err_orig, 'r');
 title('Error plot');
 legend('New Reconstruction', 'Old Reconstruction');
+
+
+
+plot(domain, reconstruction_orig, 'r', domain, gg, 'k');
+hold on;
+stem(domain, edge_approx .* (abs(edge_approx) > 1));
+legend('Reconstruction', 'Function', 'Conjugate Sum');
+title('Conjugate Sum with Polynomial Kernel');
 
 
 
