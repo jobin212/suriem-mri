@@ -11,14 +11,7 @@ coefficients_est =  GetFourierCoefficients('piecewise', N);
 edge_coefficients = coefficients_est .* (1i*sign(K) .* pi .*abs(K) ./ N).';
 
 [edge_approx, domain] = ComputeFourierReconstruction(edge_coefficients);
-plot(domain, reconstruction_orig, 'k');
-hold on;
-stem(domain, edge_approx .* (abs(edge_approx) > 1));
-legend('Function', 'Conjugate Sum');
-title('Conjugate Sum with Polynomial Kernel');
 
-[peaks, locations] = findpeaks(edge_approx .* (abs(edge_approx) > 1));
-figure;
 
 %%%%%%%%%%%%%%%%%% initialize jump function
 
@@ -74,11 +67,6 @@ jump_sum = zeros(size(domain));
 
 %%anonymous function
 g = @(x) ((-pi-x)/(2*pi) .* (x<0)) + ((pi -x)/(2*pi) .* (x>=0));
-%h = @(y) (pi -y) /(2*pi) + floor(y/(2*pi));
-
-%plot(domain, g(domain), 'k-*', domain, h(domain), 'r-o');
-
-
 
 %%caculate sum
 for x = 1:size(jump_sum)
@@ -110,12 +98,7 @@ region4 = (domain >= 3*pi /8 & domain < 3*pi /4);
 gg(region4) = (11/4) * domain(region4) - 5;
 
 
-%plot
-plot(domain, reconstruction_final, 'k', domain, reconstruction_orig, 'r', domain, gg, 'm');
-legend('New Reconstruction', 'Old Reconstruction', 'Original Function');
-title('Reconstruction');
-
-figure;
+%%%%%%%%%%%%%%%error
 
 err_final = abs(reconstruction_final - gg);
 err_orig = abs(reconstruction_orig - gg);
@@ -124,7 +107,7 @@ semilogy(domain, err_final, 'k', domain, err_orig, 'r');
 title('Error plot');
 legend('New Reconstruction', 'Old Reconstruction');
 
-
+figure;
 
 plot(domain, reconstruction_orig, 'r', domain, gg, 'k');
 hold on;
