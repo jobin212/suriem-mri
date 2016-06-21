@@ -7,11 +7,8 @@ k = 50*2.^(0:exp);
 error_vector = zeros(size(k));
 
 for i = 1:length(k)
-    error_vector(i) = InfinityError(k(i));
-    
+    error_vector(i) = InfinityErrorTrueJumps(k(i));
 end
 
-%%gibbs oscillations do not decrease
-
+figure;
 loglog(k, error_vector, k, k.^(-1))
-

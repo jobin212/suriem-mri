@@ -1,8 +1,8 @@
 %%%the amount of exponenents we want to take 
-exp = 4;
+exp = 7;
 
 %fourier coefficients
-k = 50*2.^(0:exp);
+k = 200*2.^(0:exp);
 
 error_vector = zeros(size(k));
 

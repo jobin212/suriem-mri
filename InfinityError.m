@@ -6,5 +6,7 @@ error = abs(fx(x) - S_Nf);
 
 e = max(error);
 
+%figure;
+%plot(x, S_Nf);
 
 return
