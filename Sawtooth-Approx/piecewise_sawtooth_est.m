@@ -68,6 +68,9 @@ jump_sum = zeros(size(domain));
 %%anonymous function
 g = @(x) ((-pi-x)/(2*pi) .* (x<0)) + ((pi -x)/(2*pi) .* (x>=0));
 
+
+
+
 %%caculate sum
 for x = 1:size(jump_sum)
     for j = 1:JUMPS

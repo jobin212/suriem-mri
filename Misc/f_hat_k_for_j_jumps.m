@@ -1,3 +1,5 @@
+%%%edge enhacned reconstruction has better code!
+
 %calculate the coefficients for j jumps
 N = 50;
 k = -N:N;
