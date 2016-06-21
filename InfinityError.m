@@ -1,14 +1,10 @@
-function [e] = NormError(N) 
+function [e] = InfinityError(N) 
 
 [fHat, fx] = GetFourierCoefficients('piecewise', N);
 [S_Nf, x] = ComputeFourierReconstruction(fHat);
-error = (fx(x) - S_Nf);
+error = abs(fx(x) - S_Nf);
 
-h = x(2) - x(1);
+e = max(error);
 
-e = sqrt(h) *norm(error);
 
 return
-
-
-
