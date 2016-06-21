@@ -31,7 +31,7 @@ k = (-N:N).';
 fhat_est = zeros(2*N+1, 1);
 % This is a sum over the total number of jumps
 for ix = 1:length(jmplocs)
-    fhat_est = fhat_est + jmpvals(ix)*exp(-1i*k*jmplocs(ix))./(2i*pi*k);
+    fhat_est = fhat_est + jmpvals(ix)*exp(-1i.*k*jmplocs(ix))./(2i*pi.*k);
 end
 fhat_est(k==0) = 0;             % for k==0
 
