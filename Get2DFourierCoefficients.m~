@@ -24,7 +24,7 @@ function [fHat, fxy ] = Get2DFourierCoefficients(FncType, N, M)
 FncType = lower(FncType);
 
 % Fourier coefficients to compute
-fHat = zeros(2*N+1,2*M+1);
+fHat = zeros(N,M);
 
 % Compute Fourier coefficients
 % Note: We will assume that the function is 2pi periodic
@@ -53,23 +53,21 @@ switch FncType
         end
         %}
         
-        kN = -N:N;
-        kM = -M:M;
+        kN = -N:N
+        kM = -M:M
         
         [kx, lx] = meshgrid(kN, kM);
         fHat = (1/(pi^2)) .* sin(kx).*sin(lx) ./ (kx.*lx);
         
-        fHat(kx==0) = sin(lx(kx==0)) ./ (pi^2 .* lx(kx==0));
-        fHat(lx==0) = sin(kx(lx==0)) ./ (pi^2  .*kx(lx==0));
-        
-        fHat(N+1, M+1) = 1 / (pi^2);
+        fHat(kx==0, :) = sin(lx) ./ (pi^2 .* lx);
+        fHat(:, lx==0) = sin(kx) ./ (pi^2  * .kx);
         
 
         
         
         % Function handle
         fxy = @(x,y)    0 + ...
-                        1 * ( (x >= -1) & (x <= 1) & (y >= -1 ) & (y <= 1));
+                        1 * (-1 <= x & 1 >= x & -1 <= y & y >= 1);
 
 
 end

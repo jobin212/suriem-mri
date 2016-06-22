@@ -48,16 +48,24 @@ y = -pi + (2*pi/mgrid)*( 0:mgrid-1 ).';
 
 S_NMf = zeros(length(x), length(y));
 
+%{
 %Compute Fourier partital sum 
 for ix = 1:ngrid
     for iy = 1:mgrid
-        for in = -N:N
-            for im = -M:M
-                S_NMf(ix, iy) = S_NMf(ix, iy) + fHat(in+N+1, im+M+1) * exp(1i * (in * x(ix) + im * y(iy)));
+        for ik = -N:N
+            for il = -M:M
+                S_NMf(ix, iy) = S_NMf(ix, iy) + fHat(ik+N+1, il+M+1) * exp(1i * (ik * x(ix) + il * y(iy)));
             end
         end
     end
 end
+%}
+
+%outer product
+F1 = exp(1i * x * kn.');
+F2 = exp(1i * y * km.');
+
+S_NMf = F1 * fHat * F2.';
 
 % We will mainly consider only real functions. The following ensures tiny 
 % complex values due to roundoff errors and such are not included
