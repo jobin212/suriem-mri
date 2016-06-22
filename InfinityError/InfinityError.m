@@ -8,5 +8,6 @@ e = max(error);
 
 %figure;
 %plot(x, S_Nf);
-
+figure;
+plot(x, S_Nf);
 return
