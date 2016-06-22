@@ -62,7 +62,7 @@ switch FncType
         fHat(kx==0) = sin(lx(kx==0)) ./ (pi^2 .* lx(kx==0));
         fHat(lx==0) = sin(kx(lx==0)) ./ (pi^2  .*kx(lx==0));
         
-        fHat(N+1, M+1) = 1 / (pi^2);
+        fHat(M+1, N+1) = 1 / (pi^2);
         
 
         
