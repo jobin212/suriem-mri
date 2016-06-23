@@ -1,5 +1,7 @@
 %get coefficients
-[fHat, fxy] =Get2DFourierCoefficients('box', 100, 101);
+N = 100;
+M = 100;
+[fHat, fxy] =Get2DFourierCoefficients('box', N, M);
 
 %compute reconstruction
 [S_NMf, x, y] = Compute2DFourierReconstruction(fHat);
@@ -14,7 +16,7 @@ legend('Original Function fxy');
 
 figure;
 mesh(xx,yy,S_NMf.');
-legend('Reconstruction');
+legend('Reconstruction N=M=100');
 
 figure;
 error = abs(S_NMf.' - fxy(xx,yy));
