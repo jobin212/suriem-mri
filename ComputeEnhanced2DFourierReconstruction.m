@@ -1,4 +1,4 @@
-function [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, varargin)                  
+function [S_NMf, x, y] = ComputeEnhanced2DFourierReconstruction(fHat, varargin)                  
 
 %% Compute Fourier Partial Sum Approximation
 % Script to compute the Fourier partial sum approximation of a function
@@ -46,6 +46,11 @@ x = -pi + (2*pi/ngrid)*( 0:ngrid-1 ).';
 y = -pi + (2*pi/mgrid)*( 0:mgrid-1 ).';
 
 S_NMf = zeros(length(x), length(y));
+
+for ix = 1:length(x)
+    for iy = 1:length(y)
+        for ik = -N:N
+            S_NMf(ix, iy) = S_NMf(ix, iy) + 5;
 
 %outer product
 F1 = exp(1i * x * kn.');
