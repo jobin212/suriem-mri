@@ -11,15 +11,18 @@ M = 100;
 
 %original function
 mesh(xx, yy, fxy(xx,yy));
-legend('Original Function fxy');
-
+%legend('Original Function fxy');
+%imagesc(x,y,fxy(xx,yy));
 
 figure;
 mesh(xx,yy,S_NMf.');
-legend('Reconstruction N=M=100');
+%imagesc(x,y,S_NMf.');
+%legend('Reconstruction N=M=100');
 
 figure;
 error = abs(S_NMf.' - fxy(xx,yy));
+%imagesc(x,y,error)
 mesh(xx,yy,error);
-legend('Error plot');
+colorbar;
+%legend('Error plot');
 

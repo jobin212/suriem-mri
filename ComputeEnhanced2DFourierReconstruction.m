@@ -50,9 +50,13 @@ S_NMf = zeros(length(x), length(y));
 for ix = 1:length(x)
     for iy = 1:length(y)
         for ik = -N:N
-            [jmp_loc, jmp_ht] = FindJumps(fHat(ik+N+1, :), 'prony', true);
-            S_Nf_edge = EdgeEnhancedReconstruction(fHat(ik+N+1, :), jmp_ht, jmp_loc);          
-            S_NMf(ix, iy) = S_NMf(ix, iy) + S_Nf_edge * exp(1i*ik*x);
+            %FindJumps is not working for 'prony'
+            [jmp_loc, jmp_ht] = FindJumps( fHat(ik+N+1, :) , 'conc');
+            S_Nf_edge = EdgeEnhancedReconstruction(fHat(ik+N+1, :), jmp_ht, jmp_loc);    
+            %S_Nf_edge 
+            S_Nf_edge
+            size(S_Nf_edge)
+            %S_NMf(ix, iy) = S_NMf(ix, iy) + S_Nf_edge(ik+N+1) * exp(1i*ik*x);
         end
     end
 end
