@@ -1,6 +1,6 @@
 %get coefficients
-N = 20;
-M = 20;
+N = 35;
+M = 35;
 [fHat, fxy] =Get2DFourierCoefficients('box', N, M);
 
 %compute reconstruction
@@ -11,3 +11,4 @@ M = 20;
 
 figure;
 mesh(xx,yy,S_NMf.');
+%imagesc(x, y, S_NMf);

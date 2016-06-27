@@ -74,7 +74,8 @@ switch lower(alg)
         d_fk      = (2i*pi*k) .* fk;
 
         % Jump parameters
-        ndata  = 40;         % No. of data/coefficient measurements to use
+        %adjust ndata (used to be 40)
+        ndata  = 10;         % No. of data/coefficient measurements to use
         M      = 01;         % We will use Fourier modes -(N+M-1:N+M+ndata-2)
 
 
@@ -117,7 +118,7 @@ switch lower(alg)
 
         % Extract jump locations and values
         [~, jmp_loc] = findpeaks( abs(jmp_apprx), ...
-                'MinPeakHeight', 0.5, 'MinPeakDistance', 05/(2*N+1));
+                'MinPeakHeight', 0.25, 'MinPeakDistance', 05/(2*N+1));
         jmp_ht = jmp_apprx(jmp_loc);
         jmp_loc = x(jmp_loc);         % convert from index to absolute 
                                       % location

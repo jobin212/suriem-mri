@@ -16,7 +16,7 @@ function [S_Nf, x] = ComputeFourierReconstruction(fHat, varargin)
 %       S_Nf        - the Fourier partial sum approximation (real vector)
 %       x           - the grid on which the approximation is computed
 %                     (real vector)
-%
+%          
 
 
 % Initialization
@@ -43,8 +43,9 @@ x = -pi + (2*pi/ngrid)*( 0:ngrid-1 ).';
 % Compute Fourier partial sum
 % % Note: this is not very efficient - later, you will use FFTs to compute
 % % this.
-% S_Nf = exp( 1i*x*k.' )*fHat;
+S_Nf = exp( 1i*x*k.' )*fHat;
 
+%{
 % To account for Matlab/FFTW's fftshift behavior
 fHat = fHat .* exp( -1i*pi*k );
 
@@ -55,6 +56,7 @@ fk(end-N+1:end) = fHat(1:N);
 
 % use FFT
 S_Nf = ngrid*ifft(fk);
+%}
 
 % We will mainly consider only real functions. The following ensures tiny 
 % complex values due to roundoff errors and such are not included

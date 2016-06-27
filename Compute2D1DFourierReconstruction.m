@@ -47,18 +47,70 @@ y = -pi + (2*pi/mgrid)*( 0:mgrid-1 ).';
 
 S_NMf = zeros(length(x), length(y));
 
+
+%{
 %%calculate
 for ix = 1:length(x)
     for iy = 1:length(y)
         for ik = -N:N
-            %S_NM 123 x 123, fHat 1  x 41
-            %size(S_NMf(ik+N+1, :))
-            %size(ComputeFourierReconstruction(fHat(ik+N+1, :)))
-            New_Coeff = fHat(ik+N+1, :) .* exp(1i * ik * iy);
-            S_NMf(ik+N+1, :) = ComputeFourierReconstruction(New_Coeff).';
+            for il = -M:M
+                S_NMf(ix , iy) = S_NMf(ix, iy) + fHat(ik + N + 1, il + M + 1) * exp(1i * ik * x(ix) + 1i * il * y(iy));
+            end
         end
     end
 end
+%}
+
+%%calculate
+for ix = 1:length(x)
+    comp_exp = exp(1i * x(ix) * (-N:N));
+    CFR = comp_exp * fHat;
+    %S_NMf(:, ix) = ComputeFourierReconstruction(CFR);
+    
+    
+    jmp_heights = [0];
+    jmp_locs = [0];
+    
+    if(abs(x(ix)) <= 1) 
+        jmp_heights = [-1 1].';
+        jmp_locs = [1 -1].';
+    end;
+    
+    
+    %{
+    jmps = 0;
+    if( x(ix) <= 1 && x(ix) >= -1)
+        jmps = 2;
+    end
+    %}
+    
+    %[jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
+    %[jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+    
+    
+    S_NMf(:, ix) = EdgeEnhancedReconstruction(CFR, jmp_heights, jmp_locs);       
+    
+    
+end
+
+
+%{
+%%calculate
+for ix = 1:length(x)
+    for iy = 1:length(y)
+        
+        
+        for ik = -N:N
+            for il = -M:M
+                
+                S_NMf(ix , iy) = S_NMf(ix, iy) + fHat(ik + N + 1, il + M + 1) * exp(1i * ik * x(ix) + 1i * il * y(iy));
+            end
+        end
+    end
+end
+%}
+
+
 
 % We will mainly consider only real functions. The following ensures tiny 
 % complex values due to roundoff errors and such are not included
