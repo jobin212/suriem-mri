@@ -1,7 +1,7 @@
 %get coefficients
-N = 35;
-M = 35;
-[fHat, fxy] =Get2DFourierCoefficients('box', N, M);
+N = 20;
+M = 20;
+[fHat, fxy] =Get2DFourierCoefficients('circle', N, M);
 
 %compute reconstruction
 [S_NMf, x, y] = Compute2D1DFourierReconstruction(fHat);

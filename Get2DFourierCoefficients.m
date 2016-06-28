@@ -1,6 +1,10 @@
 function [fHat, fxy ] = Get2DFourierCoefficients(FncType, N, M)
 %% Generate Fourier Series Coefficients of 2D Test Function
 % Script to generate the Fourier coefficients of a 2D test function 
+% TODO: Circle function
+% find paper
+% 2D error with one jump
+% construct along rays or in different ways!
 %
 % Usage:    [fHat, fxy] = GetFourierCoefficients(FncType, N, M)
 %
@@ -35,24 +39,6 @@ switch FncType
     % Will compute the Fourier coefficients numerically
     case ('box')
         
-        %calculate fHat values
-        %{
-        for kx = -N:N
-            for lx = -M:M
-                fHat(kx+N+1,lx+M+1) = (1/(pi^2)) * sin(kx)*sin(lx) / (kx*lx);
-                
-                if(kx == 0 && lx == 0)
-                    fHat(N+1, M+1) = 1 / (pi^2);
-                elseif(kx == 0)
-                    fHat(kx+N+1, lx+M+1) = sin(lx) / (pi^2 * lx);                             
-                elseif (lx == 0)
-                    fHat(kx+N+1, lx+M+1) = sin(kx) / (pi^2  * kx); 
-                end
-                
-            end
-        end
-        %}
-        
         kN = -N:N;
         kM = -M:M;
         
@@ -70,6 +56,25 @@ switch FncType
         % Function handle
         fxy = @(x,y)    0 + ...
                         1 * ( (x >= -1) & (x <= 1) & (y >= -1 ) & (y <= 1));
+    %
+    case ('circle')
+        kN = -N:N;
+        kM = -M:M;
+        
+        [kx, lx] = meshgrid(kN, kM);
+        
+        rx = sqrt(kx.^2 + lx.^2);
+        
+        
+        %fix equation!
+        fHat = 2* besselj(1, 2*pi.*rx) ./ (2*pi .* rx); 
+        
+        fHat(rx == 0) = 0;
+        
+        % Function handle
+        fxy = @(x,y)    0 + ...
+                        1 * (sqrt(x.^2 + y.^2) < 1) + ...
+                        1 * (sqrt(x.^2 + y.^2) == 1);
 
 
 end
