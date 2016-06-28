@@ -1,4 +1,4 @@
-function [S_NMf, x, y] = ComputeEnhanced2DFourierReconstruction(fHat, varargin)                  
+function [S_NMf, x, y] = Compute2D1DFourierReconstruction(fHat, ReconstructionType, varargin)                  
 
 %% Compute Fourier Partial Sum Approximation
 % Script to compute the Fourier partial sum approximation of a function
@@ -47,25 +47,41 @@ y = -pi + (2*pi/mgrid)*( 0:mgrid-1 ).';
 
 S_NMf = zeros(length(x), length(y));
 
+%%calculate
 for ix = 1:length(x)
-    for iy = 1:length(y)
-        for ik = -N:N
-            %FindJumps is not working for 'prony'
-            [jmp_loc, jmp_ht] = FindJumps( fHat(ik+N+1, :) , 'conc');
-            S_Nf_edge = EdgeEnhancedReconstruction(fHat(ik+N+1, :), jmp_ht, jmp_loc);    
-            %S_Nf_edge 
-            S_Nf_edge
-            size(S_Nf_edge)
-            %S_NMf(ix, iy) = S_NMf(ix, iy) + S_Nf_edge(ik+N+1) * exp(1i*ik*x);
-        end
-    end
+    comp_exp = exp(1i * x(ix) * (-N:N));
+    CFR = comp_exp * fHat;
+    %S_NMf(:, ix) = ComputeFourierReconstruction(CFR);
+    
+    jmp_heights;
+    jmp_locs;
+    
+    %for box!
+    switch(ReconstructionType)
+        case('true-jumps')
+            jmp_heights = [0];
+            jmp_locs = [0];
+
+            if(abs(x(ix)) <= 1) 
+                jmp_heights = [-1 1].';
+                jmp_locs = [1 -1].';
+            end;
+        case('prony-jumps')
+            jmps = 0;
+            if( x(ix) <= 1 && x(ix) >= -1)
+                jmps = 2;
+            end
+            
+
+            [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
+            
+        case('conc-jumps')
+            [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+    end;  
+        
+    S_NMf(:, ix) = EdgeEnhancedReconstruction(CFR, jmp_heights, jmp_locs);       
+    
 end
-
-%outer product
-F1 = exp(1i * x * kn.');
-F2 = exp(1i * y * km.');
-
-S_NMf = F1 * fHat * F2.';
 
 % We will mainly consider only real functions. The following ensures tiny 
 % complex values due to roundoff errors and such are not included
@@ -73,3 +89,24 @@ S_NMf = real(S_NMf);
 
 
 return
+
+
+
+
+
+
+%{
+%%calculate
+for ix = 1:length(x)
+    for iy = 1:length(y)
+        
+        
+        for ik = -N:N
+            for il = -M:M
+                
+                S_NMf(ix , iy) = S_NMf(ix, iy) + fHat(ik + N + 1, il + M + 1) * exp(1i * ik * x(ix) + 1i * il * y(iy));
+            end
+        end
+    end
+end
+%}

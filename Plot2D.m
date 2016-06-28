@@ -1,28 +1,27 @@
 %get coefficients
-N = 100;
-M = 100;
-[fHat, fxy] =Get2DFourierCoefficients('box', N, M);
+FncType = 'box';
+N = 20;
+sN = num2str(N);
+M = 20;
+sM = num2str(M);
+leg = strcat('N=M=',sN); 
 
-%compute reconstruction
-[S_NMf, x, y] = Compute2DFourierReconstruction(fHat);
+ErrType = 'absolute';
+ReconstructionType = lower('standard');
 
-%use meshgrid for plotting
-[xx, yy] = meshgrid(x,y);
+[fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 
-%original function
-mesh(xx, yy, fxy(xx,yy));
-%legend('Original Function fxy');
-%imagesc(x,y,fxy(xx,yy));
+[S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType);
+
+[error, xx, yy] = Get2DError(FncType, ErrType, S_NMf, x, y);
+
+mesh(xx, yy, S_NMf);
+legend(leg);
 
 figure;
-mesh(xx,yy,S_NMf.');
-%imagesc(x,y,S_NMf.');
-%legend('Reconstruction N=M=100');
+mesh(xx, yy, error);
+legend(leg);
 
-figure;
-error = abs(S_NMf.' - fxy(xx,yy));
-%imagesc(x,y,error)
-mesh(xx,yy,error);
-colorbar;
-%legend('Error plot');
+
+
 

@@ -1,4 +1,4 @@
-function [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, varargin)                  
+function [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType, varargin)                  
 
 %% Compute Fourier Partial Sum Approximation
 % Script to compute the Fourier partial sum approximation of a function
@@ -47,11 +47,52 @@ y = -pi + (2*pi/mgrid)*( 0:mgrid-1 ).';
 
 S_NMf = zeros(length(x), length(y));
 
-%outer product
-F1 = exp(1i * x * kn.');
-F2 = exp(1i * y * km.');
 
-S_NMf = F1 * fHat * F2.';
+if(strcmp(ReconstructionType, 'standard'))
+    %outer product
+    F1 = exp(1i * x * kn.');
+    F2 = exp(1i * y * km.');
+
+    S_NMf = F1 * fHat * F2.';
+
+else
+    %%calculate
+    for ix = 1:length(x)
+        comp_exp = exp(1i * x(ix) * (-N:N));
+        CFR = comp_exp * fHat;
+        %S_NMf(:, ix) = ComputeFourierReconstruction(CFR);
+
+        jmp_heights = [];
+        jmp_locs = [];
+
+        %for box!
+        switch(ReconstructionType)
+            case('true-jumps')
+                jmp_heights = [0];
+                jmp_locs = [0];
+
+                if(abs(x(ix)) <= 1) 
+                    jmp_heights = [-1 1].';
+                    jmp_locs = [1 -1].';
+                end;
+            case('prony-jumps')
+                jmps = 0;
+                if( x(ix) <= 1 && x(ix) >= -1)
+                    jmps = 2;
+                end
+
+
+                [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
+
+            case('conc-jumps')
+                [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+        end;  
+
+        S_NMf(:, ix) = EdgeEnhancedReconstruction(CFR, jmp_heights, jmp_locs);       
+
+    end
+end
+
 
 % We will mainly consider only real functions. The following ensures tiny 
 % complex values due to roundoff errors and such are not included
