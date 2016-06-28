@@ -60,21 +60,19 @@ switch FncType
     case ('circle')
         kN = -N:N;
         kM = -M:M;
-        
-        [kx, lx] = meshgrid(kN, kM);
+       
+        [kx, lx] = ndgrid(kN, kM);
         
         rx = sqrt(kx.^2 + lx.^2);
         
-        
         %fix equation!
-        fHat = 2* besselj(1, 2*pi.*rx) ./ (2*pi .* rx); 
+        fHat = besselj(1, 2*pi.*rx) ./ rx; 
         
-        fHat(rx == 0) = 0;
+        fHat(rx == 0) = pi;
         
         % Function handle
         fxy = @(x,y)    0 + ...
-                        1 * (sqrt(x.^2 + y.^2) < 1) + ...
-                        1 * (sqrt(x.^2 + y.^2) == 1);
+                        1 * (sqrt(x.^2 + y.^2) <= 1);
 
 
 end
