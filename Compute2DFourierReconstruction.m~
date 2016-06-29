@@ -90,19 +90,8 @@ else
                     jmp_heights = [-1 1].';
                     jmp_locs = [1 -1].';
                 end;
-            case('circle-true-jumps')
-                jmp_heights = [0];
-                jmp_locs = [0];
-                
-                if( abs(x(ix)) <= 1) 
-                    jmp_locs = [-1*sqrt(1- x(ix)^2) 1*sqrt(1-x(ix)^2)].';
-                    jmp_heights = [1 -1].';
-                end
-                
             case('box-prony-jumps')
-                
                 jmps = 0;
-                
                 if( x(ix) <= 1 && x(ix) >= -1)
                     jmps = 2;
                 end
@@ -110,7 +99,7 @@ else
 
                 [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
 
-            case('box-conc-jumps')
+            case('conc-jumps')
                 [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
         end;  
         

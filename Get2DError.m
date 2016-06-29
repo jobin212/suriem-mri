@@ -1,4 +1,4 @@
-function [error, xx, yy] = Get2DError(fxy, ErrType, Reconstruction, x, y)
+function [error] = Get2DError(ErrType, abs_error, x, y)
 %%
 %
 %
@@ -12,21 +12,17 @@ function [error, xx, yy] = Get2DError(fxy, ErrType, Reconstruction, x, y)
 % Initialization
 ErrType = lower(ErrType);
 
-%use meshgrid for plotting
-[xx, yy] = meshgrid(x,y);
-
-abs_error = abs(Reconstruction - fxy(xx,yy));
+error = 0;
 
 switch ErrType
     case('2norm')
         h = x(2) - x(1);
-        error = sqrt(h) * 
+        error = sqrt(h) * norm(abs_error(:));
     
     case('infinity')
-        error = abs_error;
+ 
+        error = max(max(abs_error));
                 
-
-        
 end
 
 return;

@@ -49,10 +49,7 @@ switch FncType
         fHat(lx==0) = sin(kx(lx==0)) ./ (pi^2  .*kx(lx==0));
         
         fHat(M+1, N+1) = 1 / (pi^2);
-        
-
-        
-        
+               
         % Function handle
         fxy = @(x,y)    0 + ...
                         1 * ( (x >= -1) & (x <= 1) & (y >= -1 ) & (y <= 1));
@@ -61,14 +58,14 @@ switch FncType
         kN = -N:N;
         kM = -M:M;
        
-        [kx, lx] = ndgrid(kN, kM);
+        [kx, lx] = meshgrid(kN, kM);
         
         rx = sqrt(kx.^2 + lx.^2);
         
         %fix equation!
-        fHat = besselj(1, 2*pi.*rx) ./ rx; 
+        fHat = besselj(1, rx) ./ (2*pi * rx); 
         
-        fHat(rx == 0) = pi;
+        fHat(rx == 0) = 1/(2*pi);
         
         % Function handle
         fxy = @(x,y)    0 + ...
