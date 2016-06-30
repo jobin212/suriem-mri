@@ -32,7 +32,7 @@ kn = (-N:N).';
 km = (-M:M).';
 
 % Process optional arguments
-if( nargin == 3 )           % reconstruction grid length 
+if( nargin == 4 )           % reconstruction grid length 
     ngrid = varargin{1};
     mgrid = varargin{2};
 else
@@ -54,21 +54,6 @@ if(strcmp(ReconstructionType, 'standard'))
     F2 = exp(1i * y * km.');
 
     S_NMf = F1 * fHat * F2.';
-    
-elseif (strcmp(ReconstructionType, 'circle-est'))
-    for ix = 1:length(x)
-        comp_exp = exp(1i * x(ix) * (-N:N));
-        CFR = comp_exp * fHat;
-
-    %case('true-jumps')
-                jmp_heights = [0];
-                jmp_locs = [0];
-
-                
-                 S_NMf(:, ix) = EdgeEnhancedReconstruction(CFR, jmp_heights, jmp_locs);                       
-                    
-   end;
-        
 
 else
     %%calculate

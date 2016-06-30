@@ -1,12 +1,12 @@
 %get coefficients
-FncType = 'box';
+FncType = 'circle';
 N = 100;
 sN = num2str(N);
 M = N;
 sM = num2str(M);
 leg = strcat('N=M=',sN); 
 
-ReconstructionType = lower('box-true-jumps');
+ReconstructionType = lower('standard');
 
 [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 

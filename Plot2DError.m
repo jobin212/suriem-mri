@@ -1,7 +1,9 @@
+clear;
+
 %%%the amount of exponenents we want to take 
-exp = 7;
+exp = 5;
 ErrType = '2norm';
-FncType = 'box';
+FncType = 'circle';
 ReconstructionType = 'standard';
 
 
@@ -11,16 +13,21 @@ k = 50*2.^(0:exp);
 error_vector = zeros(size(k));
 
 for i = 1:length(k)
-    [fHat, fxy] = Get2DFourierCoefficients(FncType, k(i), k(i));
+    N = k(i);
+    M = N;
+    
+    [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 
-    [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType);
+    [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType, 2*N+1, 2*M+1);
     
     [xx, yy] = meshgrid(x , y);
     
     abs_error = abs(fxy(xx,yy) - S_NMf);
     
-    error_vector(i) = Get2DError(ErrType, abs_error, x, y);
+    
+    
+    error_vector(i) = GetError(ErrType, abs_error(:), x);
     
 end
 
-loglog(k ,error_vector);
+plot(log2(k),log2(error_vector));
