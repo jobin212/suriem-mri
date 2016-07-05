@@ -6,7 +6,7 @@ M = N;
 sM = num2str(M);
 leg = strcat('N=M=',sN); 
 
-ReconstructionType = lower('standard');
+ReconstructionType = 'true-jumps';
 
 [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 
