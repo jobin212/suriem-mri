@@ -1,8 +1,8 @@
 clear;
 
 %%%the amount of exponenents we want to take 
-runs = 3;
-ErrType = '2norm';
+runs = 4;
+ErrType = 'infinity';
 FncType = 'box';
 ReconstructionType = 'box-true-jumps';
 
@@ -91,19 +91,21 @@ for i = 1:length(k)
     end 
     
     f = fxy(x, x(ix));
-    abs_error = abs(f- S_NMf);
+    abs_error = abs(f - S_NMf);
     
-    %{
+    
     figure;
     plot(x, S_NMf);
     hold on;
     plot(x, f);
-    %}
+    legend('reconstruction' ,'f');
     
-    %{
+    
+    
     figure;
     plot(x, abs_error);
-    %}
+    title('abs_error');
+        
     error_vector(i) = GetError(ErrType, abs_error, x);
     
 end
@@ -112,4 +114,6 @@ figure;
 loglog(k, error_vector)
 hold on;
 loglog(k, k.^(-1))
-legend('error', '1/k')
+hold on;
+loglog(k, k.^(-2))
+legend('error', 'k^-1', 'k^-2')

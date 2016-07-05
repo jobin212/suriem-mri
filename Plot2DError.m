@@ -1,14 +1,14 @@
 clear;
 
 %%%the amount of exponenents we want to take 
-exp = 4;
+runs = 4;
 ErrType = '2norm';
 FncType = 'circle';
-ReconstructionType = 'standard';
+ReconstructionType = 'circle-true-jumps';
 
 
 %fourier coefficients
-k = 50*2.^(0:exp);
+k = 50*2.^(0:runs-1);
 
 error_vector = zeros(size(k));
 
@@ -18,7 +18,7 @@ for i = 1:length(k)
     
     [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 
-    [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType, 2*(2*N+1), 2*(2*M+1));
+    [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType);
     
     [xx, yy] = meshgrid(x , y);
     
@@ -31,3 +31,5 @@ for i = 1:length(k)
 end
 
 loglog(k, error_vector)
+hold on;
+loglog(k, k.^(-1))
