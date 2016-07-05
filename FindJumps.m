@@ -74,8 +74,7 @@ switch lower(alg)
         d_fk      = (2i*pi*k) .* fk;
 
         % Jump parameters
-        %adjust ndata (used to be 40)
-        ndata  = 10;         % No. of data/coefficient measurements to use
+        ndata  = 20;         % No. of data/coefficient measurements to use
         M      = 01;         % We will use Fourier modes -(N+M-1:N+M+ndata-2)
 
 
@@ -118,7 +117,7 @@ switch lower(alg)
 
         % Extract jump locations and values
         [~, jmp_loc] = findpeaks( abs(jmp_apprx), ...
-                'MinPeakHeight', 0.25, 'MinPeakDistance', 05/(2*N+1));
+                'MinPeakHeight', 0.5, 'MinPeakDistance', 05/(2*N+1));
         jmp_ht = jmp_apprx(jmp_loc);
         jmp_loc = x(jmp_loc);         % convert from index to absolute 
                                       % location
@@ -130,14 +129,14 @@ end
 if( refine )
     % We will use the high freq. coefs (k>=M) to fit data
 %         M = 50;
-    M = round(3*N/4); 
+    M = round(3*N/4);
 
     options = optimoptions('fsolve', ...
                             'Algorithm', 'levenberg-marquardt', ...
                             'StepTolerance', 1e-10, ...
                             'FunctionTolerance', 1e-10, ...
-                            'MaxIterations', 1e5, ...
-                            'MaxFunctionEvaluations', 1e5, ...
+                            'MaxIterations', 1e3, ...
+                            'MaxFunctionEvaluations', 1e3, ...
                             'Display','off' );
     [refined_jmps, rsdl, flag, dtls]  = fsolve( @(jmp_info) ...
                     FitJumps( jmp_info, k(abs(k)>=M), fk(abs(k)>=M) ), ...

@@ -2,7 +2,7 @@ clear;
 
 %%%the amount of exponenents we want to take 
 exp = 3;
-ErrType = '2norm';
+ErrType = 'Infinity';
 FncType = 'circle';
 ReconstructionType = 'true-jumps';
 
@@ -18,23 +18,19 @@ for i = 1:length(k)
     
     [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 
-    [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType);
+    [S_NMf, x, y] = Compute2DFourierReconstruction(fHat, ReconstructionType, 2*(2*N+1), 2*(2*M+1));
     
     [xx, yy] = meshgrid(x , y);
     
-    
-    
-    
     abs_error = abs(fxy(xx,yy) - S_NMf);
     
-    cross_section = abs(abs_error(N+1, :));
     
-    error_vector(i) = GetError(ErrType, cross_section, x);
+    
+    error_vector(i) = GetError(ErrType, abs_error(:), x);
     
 end
 
-
-
-loglog(k, error_vector);
-
-
+loglog(k, error_vector)
+hold on;
+loglog(k, k.^(-1))
+legend('error', '1/k')

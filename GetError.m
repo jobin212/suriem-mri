@@ -17,7 +17,7 @@ error = 0;
 switch ErrType
     case('2norm')
         h = x(2) - x(1);
-        error = sqrt(h) * norm(abs_error);
+        error = h * norm(abs_error);
     
     case('infinity')
  
