@@ -2,10 +2,10 @@ clear;
 
 %%%the amount of exponenents we want to take 
 runs = 4;
-ErrType = 'infinity';
-FncType = 'box';
-ReconstructionType = 'box-true-jumps';
-
+ErrType = '2norm';
+FncType = 'circle';
+ReconstructionType = 'standard';
+%order of errors decreased
 
 %fourier coefficients
 k = 50*2.^(0:runs-1);
@@ -78,7 +78,19 @@ for i = 1:length(k)
 
                 [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
 
+            case('circle-prony-jumps')
+                jmps = 0;
+
+                if( x(ix) <= 1 && x(ix) >= -1)
+                    jmps = 2;
+                end
+
+                [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);                
+
             case('box-conc-jumps')
+                [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+
+            case('circle-conc-jumps')
                 [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
         end;  
 
@@ -86,25 +98,26 @@ for i = 1:length(k)
 
 
         S_NMf =  EdgeEnhancedReconstruction(CFR, jmp_heights, jmp_locs);
-        
-        
+
+
     end 
     
     f = fxy(x, x(ix));
     abs_error = abs(f - S_NMf);
     
     
+    %{
     figure;
     plot(x, S_NMf);
     hold on;
     plot(x, f);
     legend('reconstruction' ,'f');
     
-    
-    
     figure;
     plot(x, abs_error);
     title('abs_error');
+    %}
+    
         
     error_vector(i) = GetError(ErrType, abs_error, x);
     
@@ -117,3 +130,4 @@ loglog(k, k.^(-1))
 hold on;
 loglog(k, k.^(-2))
 legend('error', 'k^-1', 'k^-2')
+ylim([1e-4, 1e0]);

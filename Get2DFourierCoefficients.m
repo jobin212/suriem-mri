@@ -65,11 +65,29 @@ switch FncType
         %fix equation!
         fHat = besselj(1, rx) ./ (2*pi * rx); 
         
-        fHat(rx == 0) = 1/(2*pi);
+        fHat(rx == 0) = 1/(4*pi);
+        
         
         % Function handle
         fxy = @(x,y)    0 + ...
                         1 * (sqrt(x.^2 + y.^2) <= 1);
+    
+    case('strip')
+        kN = -N:N;
+        kM = -M:M;
+       
+        [kx, lx] = meshgrid(kN, kM);
+        
+
+        
+        fHat = 0 * kx + 0 *  lx;
+        
+        fHat(kx == 0) = (2 * sinh(kM * 1i) ./ (kM * 1i)).';
+        
+        
+        % Function handle
+        fxy = @(x,y)    0 + ...
+                        1 * ( x >= -1 & x <= 1);
 
 
 end

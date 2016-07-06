@@ -94,8 +94,20 @@ else
 
 
                 [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
+                
+            case('circle-prony-jumps')
+                jmps = 0;
+                
+                if( x(ix) <= 1 && x(ix) >= -1)
+                    jmps = 2;
+                end
+                
+                [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);                
 
             case('box-conc-jumps')
+                [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+                
+            case('circle-conc-jumps')
                 [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
         end;  
         
