@@ -3,9 +3,9 @@ clear;
 %%%the amount of exponenents we want to take 
 runs = 4;
 ErrType = '2norm';
-FncType = 'box';
-ReconstructionType = 'box-prony-jumps';
-ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+2');
+FncType = 'cile';
+ReconstructionType = 'circle-prony-jumps';
+ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+1');
 %order of errors decreased
 
 %fourier coefficients
@@ -16,7 +16,7 @@ error_vector = zeros(size(k));
 for i = 1:length(k)
     N = k(i);
     M = N;
-    ix = 3*N + 2;
+    ix = 3*N + 1;
     kn = (-N:N).';
     km = (-M:M).';
     
