@@ -58,8 +58,11 @@ if(strcmp(ReconstructionType, 'standard'))
 else
     %%calculate
     for ix = 1:length(x)
+        %%use edge enhanced 
         comp_exp = exp(1i * x(ix) * (-N:N));
         CFR = comp_exp * fHat;
+        
+        
         %S_NMf(:, ix) = ComputeFourierReconstruction(CFR);
 
         jmp_heights = [];
@@ -93,7 +96,7 @@ else
                 end
 
 
-                [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);
+                [jmp_locs, jmp_heights] = FindJumps(CFR, 'prony', false, [], jmps);
                 
             case('circle-prony-jumps')
                 jmps = 0;
@@ -102,13 +105,13 @@ else
                     jmps = 2;
                 end
                 
-                [jmp_heights, jmp_locs] = FindJumps(CFR, 'prony', false, [], jmps);                
+                [jmp_locs, jmp_heights] = FindJumps(CFR, 'prony', false, [], jmps);                
 
             case('box-conc-jumps')
-                [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+                [jmp_locs, jmp_heights] = FindJumps(CFR, 'conc', false);
                 
             case('circle-conc-jumps')
-                [jmp_heights, jmp_locs] = FindJumps(CFR, 'conc', false);
+                [jmp_locs, jmp_heights] = FindJumps(CFR, 'conc', false);
         end;  
         
         

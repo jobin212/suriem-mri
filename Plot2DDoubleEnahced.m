@@ -3,9 +3,9 @@ clear;
 %%%the amount of exponenents we want to take 
 runs = 4;
 ErrType = '2norm';
-FncType = 'cile';
-ReconstructionType = 'circle-prony-jumps';
-ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+1');
+FncType = 'box';
+ReconstructionType = 'box-prony-jumps';
+ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+2');
 %order of errors decreased
 
 %fourier coefficients
@@ -16,7 +16,7 @@ error_vector = zeros(size(k));
 for i = 1:length(k)
     N = k(i);
     M = N;
-    ix = 3*N + 1;
+    ix = 3*N + 2;
     kn = (-N:N).';
     km = (-M:M).';
     
@@ -43,10 +43,26 @@ for i = 1:length(k)
         
         comp_exp = exp(1i * x(ix) * (-N:N));
         
-        CFR = comp_exp * fHat;
+        Edge_Enhanced_fHat = zeros(size(fHat));
         
         jmp_heights = [];
         jmp_locs = [];
+        
+        for jx = 1:length(fHat)
+            jmp_heights = [0];
+            jmp_locs = [0];
+
+            if(abs(x(ix)) <= 1) 
+                jmp_heights = [-1 1].';
+                jmp_locs = [1 -1].';
+            end;
+            Edge_Enhanced_fHat = EdgeEnhancedReconstruction(fHat(jx, :), [jmp_heights], [jmp_locs]);
+        end;
+            
+        
+         CFR = comp_exp * Edge_Enhanced_fHat;
+        
+        
 
         
         switch(ReconstructionType)

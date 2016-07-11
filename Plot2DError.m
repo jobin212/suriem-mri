@@ -4,7 +4,7 @@ clear;
 runs = 4;
 ErrType = '2norm';
 FncType = 'circle';
-ReconstructionType = 'circle-true-jumps';
+ReconstructionType = 'circle-prony-jumps';
 
 
 %fourier coefficients

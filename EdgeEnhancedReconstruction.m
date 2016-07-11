@@ -1,4 +1,5 @@
-function S_Nf_edge = EdgeEnhancedReconstruction(fhat, jmpvals, jmplocs)
+function S_Nf_edge = EdgeEnhancedReconstruction(fhat, ...
+                            jmpvals, jmplocs, varargin)
 
 %% Compute Edge Enhanced Fourier Reconstructions
 % Use jump locations and jump values to estimate Fourier coefficients. Use 
@@ -26,12 +27,17 @@ N = (M-1)/2;
 % Fourier modes
 k = (-N:N).';
 
+% Optional arguments
+if( nargin>3 )
+    ngrid = varargin{1};
+end
+
 
 % Compute estimated Fourier coefficients
 fhat_est = zeros(2*N+1, 1);
 % This is a sum over the total number of jumps
 for ix = 1:length(jmplocs)
-    fhat_est = fhat_est + jmpvals(ix)*exp(-1i.*k*jmplocs(ix))./(2i*pi.*k);
+    fhat_est = fhat_est + jmpvals(ix)*exp(-1i*k*jmplocs(ix))./(2i*pi*k);
 end
 fhat_est(k==0) = 0;             % for k==0
 
@@ -39,7 +45,12 @@ fhat_est(k==0) = 0;             % for k==0
 ramp = @(y) (pi-y)/(2*pi) + floor( y/(2*pi) );
 
 % Fourier reconstruction
-[S_Nf_edge, x] = ComputeFourierReconstruction(fhat-fhat_est);
+if( nargin>3 )
+    [S_Nf_edge, x] = ComputeFourierReconstruction(fhat-fhat_est, ngrid);
+else
+    [S_Nf_edge, x] = ComputeFourierReconstruction(fhat-fhat_est);
+end
+
 
 % Edge-based correction term
 edge_correction = zeros(length(x), 1);
@@ -47,6 +58,5 @@ for ix = 1:length(jmplocs)
     edge_correction = edge_correction + jmpvals(ix)*ramp(x-jmplocs(ix));
 end
 S_Nf_edge = S_Nf_edge + edge_correction;
-
 
 return
