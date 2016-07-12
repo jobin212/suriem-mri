@@ -16,7 +16,7 @@ error_vector = zeros(size(k));
 for i = 1:length(k)
     N = k(i);
     M = N;
-    ix = 3*N + 48;
+    ix = 3*N + 50;
     kn = (-N:N).';
     km = (-M:M).';
     
@@ -55,8 +55,8 @@ for i = 1:length(k)
                 %jmp_heights = [-1 1].';
                 p = jx - M - 1;
                 jmp_heights = (sin(p) / (pi * p)) * ([-1 1]).';
-                if(p == 0) 
-                    jmp_heights = [-1 1];
+                if(p == 0 ) 
+                    jmp_heights = [-1/pi 1/pi];
                 end;
                 jmp_locs = [1 -1].';
             end;
@@ -65,13 +65,11 @@ for i = 1:length(k)
             CFR(jx) = Edge_Enhanced_fHat(ix);
         end;
         
-        %comp_exp = exp(1i * x(ix) * (-N:N));
+        comp_exp = exp(1i * x(ix) * (-N:N));
         
         %CFR = comp_exp * fHat;
             
-       
-       
-
+   
         
         switch(ReconstructionType)
             case('box-true-jumps')
@@ -90,32 +88,6 @@ for i = 1:length(k)
                     jmp_locs = [-1*sqrt(1- x(ix)^2) 1*sqrt(1-x(ix)^2)].';
                     jmp_heights = [1 -1].';
                 end
-
-            case('box-prony-jumps')
-
-                jmps = 0;
-
-                if( x(ix) <= 1 && x(ix) >= -1)
-                    jmps = 2;
-                end
-
-
-                [jmp_locs, jmp_heights] = FindJumps(CFR, 'prony', false, [], jmps);
-
-            case('circle-prony-jumps')
-                jmps = 0;
-
-                if( x(ix) <= 1 && x(ix) >= -1)
-                    jmps = 2;
-                end
-
-                [jmp_locs, jmp_heights] = FindJumps(CFR, 'prony', false, [], jmps);                
-
-            case('box-conc-jumps')
-                [jmp_locs, jmp_heights] = FindJumps(CFR, 'conc', true);
-
-            case('circle-conc-jumps')
-                [jmp_locs, jmp_heights] = FindJumps(CFR, 'conc', true);
         end;  
 
 
@@ -130,15 +102,17 @@ for i = 1:length(k)
     
     f = fxy(x, x(ix));
     abs_error = abs(f - S_NMf);
+  
     
     
     
     figure;
     plot(x, S_NMf);
-    
+    ylim([-0.5, 1.5]);
     
     hold on;
     plot(x, f);
+    
     legend('reconstruction' ,'f');
     
     
@@ -153,14 +127,14 @@ for i = 1:length(k)
     error_vector(i) = GetError(ErrType, abs_error, x);
     
 end
-%{
-figure;
-loglog(k, error_vector)
-hold on;
-loglog(k, k.^(-1))
-hold on;
-loglog(k, k.^(-2))
-legend(ErrTitle, 'k^{-1}', 'k^{-2}')
-ylim([1e-4, 1e0]);
 
-%}
+if( runs > 1) 
+    figure;
+    loglog(k, error_vector)
+    hold on;
+    loglog(k, k.^(-1))
+    hold on;
+    loglog(k, k.^(-2))
+    legend(ErrTitle, 'k^{-1}', 'k^{-2}')
+    ylim([1e-4, 1e0]);
+end;
