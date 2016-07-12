@@ -60,7 +60,8 @@ S_Nf = ngrid*ifft(fk);
 
 % We will mainly consider only real functions. The following ensures tiny 
 % complex values due to roundoff errors and such are not included
-S_Nf = real(S_Nf);
+
+%S_Nf = real(S_Nf);
 
 
 return

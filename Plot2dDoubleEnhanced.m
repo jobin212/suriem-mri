@@ -1,11 +1,11 @@
 clear;
 
 %%%the amount of exponenents we want to take 
-runs = 4;
+runs = 1;
 ErrType = '2norm';
 FncType = 'box';
-ReconstructionType = 'box-prony-jumps';
-ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+2');
+ReconstructionType = 'box-true-jumps';
+ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+1');
 %order of errors decreased
 
 %fourier coefficients
@@ -16,7 +16,7 @@ error_vector = zeros(size(k));
 for i = 1:length(k)
     N = k(i);
     M = N;
-    ix = 3*N + 2;
+    ix = 3*N + 48;
     kn = (-N:N).';
     km = (-M:M).';
     
@@ -25,6 +25,7 @@ for i = 1:length(k)
     
     x = -pi + (2*pi/ngrid)*( 0:ngrid-1 ).';
     y = -pi + (2*pi/mgrid)*( 0:mgrid-1 ).';
+    z = -pi + (2*pi/(2*N+1))*( 0:(2*N)).';
     
     [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
     
@@ -39,30 +40,37 @@ for i = 1:length(k)
         S_NMf = temp(ix, :).';
 
     else
-        %%calculate    
         
-        comp_exp = exp(1i * x(ix) * (-N:N));
-        
-        Edge_Enhanced_fHat = zeros(size(fHat));
         
         jmp_heights = [];
         jmp_locs = [];
+        
+        CFR = zeros(2*N+1, 1);
         
         for jx = 1:length(fHat)
             jmp_heights = [0];
             jmp_locs = [0];
 
-            if(abs(x(ix)) <= 1) 
-                jmp_heights = [-1 1].';
+            if(abs(z(jx)) < 1) 
+                %jmp_heights = [-1 1].';
+                p = jx - M - 1;
+                jmp_heights = (sin(p) / (pi * p)) * ([-1 1]).';
+                if(p == 0) 
+                    jmp_heights = [-1 1];
+                end;
                 jmp_locs = [1 -1].';
             end;
-            Edge_Enhanced_fHat = EdgeEnhancedReconstruction(fHat(jx, :), [jmp_heights], [jmp_locs]);
-        end;
             
+            Edge_Enhanced_fHat = EdgeEnhancedReconstruction(fHat(:, jx), jmp_heights, jmp_locs);
+            CFR(jx) = Edge_Enhanced_fHat(ix);
+        end;
         
-         CFR = comp_exp * Edge_Enhanced_fHat;
+        %comp_exp = exp(1i * x(ix) * (-N:N));
         
-        
+        %CFR = comp_exp * fHat;
+            
+       
+       
 
         
         switch(ReconstructionType)
@@ -114,31 +122,38 @@ for i = 1:length(k)
 
 
         S_NMf =  EdgeEnhancedReconstruction(CFR, jmp_heights, jmp_locs);
-
-
+    
+        %F1 = exp(1i * x * kn.');
+        %S_NMf = F1 * CFR.';
+        
     end 
     
     f = fxy(x, x(ix));
     abs_error = abs(f - S_NMf);
     
     
-    %{
+    
     figure;
     plot(x, S_NMf);
+    
+    
     hold on;
     plot(x, f);
     legend('reconstruction' ,'f');
     
+    
+    
+    
     figure;
     plot(x, abs_error);
     title('abs_error');
-    %}
+    
     
         
     error_vector(i) = GetError(ErrType, abs_error, x);
     
 end
-
+%{
 figure;
 loglog(k, error_vector)
 hold on;
@@ -147,3 +162,5 @@ hold on;
 loglog(k, k.^(-2))
 legend(ErrTitle, 'k^{-1}', 'k^{-2}')
 ylim([1e-4, 1e0]);
+
+%}
