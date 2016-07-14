@@ -1,6 +1,8 @@
 %get coefficients
+%discretize
+%cross section near edges and center
 FncType = 'box';
-N = 50;
+N = 100;
 sN = num2str(N);
 M = N;
 sM = num2str(M);
