@@ -1,22 +1,22 @@
 clear;
 
 %%%the amount of exponenents we want to take 
-runs = 4;
+runs = 1;
 ErrType = '2norm';
 FncType = 'box';
-ReconstructionType = 'box-prony-jumps';
+ReconstructionType = 'standard';
 ErrTitle = strcat(ErrType, ' ', FncType, ' ', ReconstructionType, ' 3*N+2');
 %order of errors decreased
 
 %fourier coefficients
-k = 50*2.^(0:runs-1);
+k = 100*2.^(0:runs-1);
 
 error_vector = zeros(size(k));
 
 for i = 1:length(k)
     N = k(i);
     M = N;
-    ix = 3*N + 2;
+    ix = 3*N + 91   ;
     kn = (-N:N).';
     km = (-M:M).';
     
@@ -112,11 +112,12 @@ for i = 1:length(k)
     hold on;
     plot(x, f);
     legend('reconstruction' ,'f');
+    %}
     
     figure;
     plot(x, abs_error);
     title('abs_error');
-    %}
+    
     
         
     error_vector(i) = GetError(ErrType, abs_error, x);

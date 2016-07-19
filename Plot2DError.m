@@ -3,8 +3,8 @@ clear;
 %%%the amount of exponenents we want to take 
 runs = 4;
 ErrType = '2norm';
-FncType = 'circle';
-ReconstructionType = 'circle-prony-jumps';
+FncType = 'box';
+ReconstructionType = 'box-prony-jumps';
 
 
 %fourier coefficients

@@ -6,7 +6,7 @@ M = N;
 sM = num2str(M);
 leg = strcat('N=M=',sN); 
 
-ReconstructionType = 'box-true-jumps';
+ReconstructionType = 'standard';
 
 [fHat, fxy] = Get2DFourierCoefficients(FncType, N, M);
 
@@ -20,12 +20,14 @@ abs_error = abs(S_NMf - fxy(xx,yy));
 
 
 mesh(xx, yy, S_NMf);
-legend(leg);
+%legend(leg);
 xlabel('x')
 ylabel('y')
 
 figure;
 mesh(xx, yy, abs_error);
+zlim([0 0.6]);
+view(45, 65);
 legend(leg);
 
 

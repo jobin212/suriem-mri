@@ -79,13 +79,13 @@ abs_error = abs(S_NMf - fxy(xx,yy));
 
 
 mesh(xx, yy, real(S_NMf));
-legend(leg);
+%legend(leg);
 xlabel('x')
 ylabel('y')
 
 figure;
 mesh(xx, yy, abs_error);
-legend(leg);
+%legend(leg);
 
 
 
